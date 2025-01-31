@@ -104,8 +104,10 @@ def select_parent(population, population_fitness):
     Randomly selects a few genomes from the population
     the best genome is chosen to be returned (Tournament Selection)
     """
+    pop_size = len(population)
+    num_contestants = round(pop_size * 0.25)
 
-    tournament_indices = random.sample(range(len(population)), 10)
+    tournament_indices = random.sample(range(len(population)), num_contestants)
 
     # Gets the index of the best chosen indice based on their fitness
     # best_index = max(tournament_indices, key=lambda k: population_fitness[k])

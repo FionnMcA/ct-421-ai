@@ -6,8 +6,14 @@ from operators import cycle_crossover, ordered_crossover, swap_mutation, scrambl
 from utils import read_tsp_as_dict, init_population, create_distance_matrix, genome_distance, fitnesses, select_parent
 from matplotlib import pyplot as plt
 
+GENERATIONS = 100
+POPULATION_SIZE = 100
+MUTATION_RATE = 0.02
+CROSSOVER_RATE = 0.8
 
-def genetic_algorithm(filepath, generations=100, population_size=100, mutation_rate=0.02, crossover_rate=0.8):
+
+def genetic_algorithm(filepath, generations=GENERATIONS, population_size=POPULATION_SIZE, mutation_rate=MUTATION_RATE,
+                      crossover_rate=CROSSOVER_RATE):
     start = time.time()  # Start the timer
     city_dict = read_tsp_as_dict(filepath)  # Convert the file to a dictionary
 
@@ -151,33 +157,31 @@ def vary_parameters(filepath, file):
 
 
 def main():
-    files = ['berlin52', 'kroA100', 'pr1002']
+    files = ['test5', 'test10', 'berlin52', 'kroA100', 'pr1002']
     for file in files:
         filepath = os.path.join("tsp-files", f"{file}.tsp")
-        generations = 100
-        population_size = 100
-        mutation_rate = 0.02
-        crossover_rate = 0.8
 
-        # Uncomment if you want to see the affects of varying different parameters in the GA
+        # 1 Uncomment if you want to see the affects of varying different parameters in the GA
         # vary_parameters(filepath, file)
 
-        # If you to see the average and best distances of each generation with static parameters
+        # 2 If you to see the average and best distances of each generation with static parameters
         duration, best_distances, average_distances, overall_best_genome, overall_best_distance = genetic_algorithm(
-            filepath, generations, population_size, mutation_rate, crossover_rate)
+            filepath)
 
         plt.figure(figsize=(10, 6))
         plt.plot(best_distances, label="Best Distance")
         plt.plot(average_distances, label="Average Distance")
         plt.title(
-            f"{file} - {generations} Generations, {population_size} Population, "
-            f"{mutation_rate} Mutation, {crossover_rate} Crossover"
+            f"{file} - {GENERATIONS} Generations, {POPULATION_SIZE} Population, "
+            f"{MUTATION_RATE} Mutation, {CROSSOVER_RATE} Crossover"
         )
         plt.xlabel("Generation")
         plt.ylabel("Distance")
         plt.legend()
         plt.grid(True)
         plt.show()
+
+        print(f"Duration: {duration:.2f}s\nBest Distance found: {overall_best_distance}m")
 
 
 if __name__ == "__main__":
