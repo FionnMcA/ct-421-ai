@@ -9,7 +9,7 @@ from matplotlib import pyplot as plt
 GENERATIONS = 100
 POPULATION_SIZE = 100
 MUTATION_RATE = 0.02
-CROSSOVER_RATE = 0.8
+CROSSOVER_RATE = 0.7
 
 
 def genetic_algorithm(filepath, generations=GENERATIONS, population_size=POPULATION_SIZE, mutation_rate=MUTATION_RATE,
@@ -88,14 +88,13 @@ def genetic_algorithm(filepath, generations=GENERATIONS, population_size=POPULAT
 def vary_parameters(filepath, file):
     generations = 100
 
-    pop_sizes = [10, 50, 100, 250, 500]
-
+    pop_sizes = [10, 50, 100, 250, 500, 750, 1000]
     mutation_rates = [0, 0.02, 0.25, 0.5, 1]
 
     crossover_rates = [0, 0.2, 0.4, 0.6, 0.8, 1]
 
     # Plot varying population sizes
-    plt.figure(figsize=(10, 6))
+    plt.figure(figsize=(8, 5))
     for pop_size in pop_sizes:
         (duration, best_distances, average_distances,
          overall_best_genome, overall_best_distance) = genetic_algorithm(
@@ -115,7 +114,7 @@ def vary_parameters(filepath, file):
     plt.show()
 
     # Plot varying mutation rates
-    plt.figure(figsize=(10, 6))
+    plt.figure(figsize=(8, 5))
     for mutation_rate in mutation_rates:
         (duration, best_distances, average_distances,
          overall_best_genome, overall_best_distance) = genetic_algorithm(
@@ -136,7 +135,7 @@ def vary_parameters(filepath, file):
     plt.show()
 
     # Plot varying crossover rates
-    plt.figure(figsize=(10, 6))
+    plt.figure(figsize=(8, 5))
     for crossover_rate in crossover_rates:
         (duration, best_distances, average_distances,
          overall_best_genome, overall_best_distance) = genetic_algorithm(
@@ -157,18 +156,18 @@ def vary_parameters(filepath, file):
 
 
 def main():
-    files = ['test5', 'test10', 'berlin52', 'kroA100', 'pr1002']
+    files = ['berlin52', 'kroA100', 'pr1002']
     for file in files:
         filepath = os.path.join("tsp-files", f"{file}.tsp")
 
         # 1 Uncomment if you want to see the affects of varying different parameters in the GA
         # vary_parameters(filepath, file)
-
+        #
         # 2 If you to see the average and best distances of each generation with static parameters
         duration, best_distances, average_distances, overall_best_genome, overall_best_distance = genetic_algorithm(
             filepath)
 
-        plt.figure(figsize=(10, 6))
+        plt.figure(figsize=(7, 4))
         plt.plot(best_distances, label="Best Distance")
         plt.plot(average_distances, label="Average Distance")
         plt.title(
@@ -181,7 +180,7 @@ def main():
         plt.grid(True)
         plt.show()
 
-        print(f"Duration: {duration:.2f}s\nBest Distance found: {overall_best_distance}m")
+        print(f"Duration: {duration}s\nBest Distance found: {overall_best_distance}m")
 
 
 if __name__ == "__main__":
