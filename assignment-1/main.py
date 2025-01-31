@@ -1,5 +1,6 @@
 import time
 import random
+import os
 from operators import cycle_crossover, ordered_crossover, swap_mutation, scramble_mutation
 from utils import read_tsp_as_dict, init_population, create_distance_matrix, genome_distance, fitnesses, select_parent
 
@@ -78,8 +79,8 @@ def genetic_algorithm(filepath, generations=100, population_size=100, mutation_r
 def main():
     files = ['test5', 'test10', 'berlin52', 'kroA100', 'pr1002']
     for file in files:
-        filepath = f"/Users/fionnmcardle/Desktop/assignments/ct-421-ai/assignment-1/tsp-files/{file}.tsp"
-        duration, best_distances, average_distances, overall_best_genome, overall_best_distance = genetic_algorithm(filepath, 100, 100, 0.02, 0.8)
+        filepath = os.path.join("tsp-files", f"{file}.tsp")
+        duration, best_distances, average_distances, overall_best_genome, overall_best_distance = genetic_algorithm(filepath, 200, 500, 0.02, 0.8)
         print(f"{file} - duration: {duration} - best distance: {overall_best_distance} ")
 
 if __name__ == "__main__":

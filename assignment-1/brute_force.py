@@ -1,4 +1,5 @@
 import itertools
+import os
 from utils import read_tsp_as_dict, create_distance_matrix, genome_distance
 
 # Brute-force to find the best route
@@ -14,8 +15,8 @@ def brute_force_tsp(city_dict, distance_matrix):
             best_route = permutation
     return best_route, best_distance
 
-
-city_dict = read_tsp_as_dict("/Users/fionnmcardle/Desktop/assignments/ct-421-ai/assignment-1/tsp-files/test5.tsp")
+filepath = os.path.join("tsp-files", "test10.tsp")
+city_dict = read_tsp_as_dict(filepath)
 
 distance_matrix = create_distance_matrix(city_dict)
 
