@@ -19,7 +19,7 @@ def brute_force_tsp(city_dict, distance_matrix):
     duration = end - start
     return best_route, best_distance, duration
 
-filepath = os.path.join("tsp-files", "test10.tsp")
+filepath = os.path.join("tsp-files", "test11.tsp")
 city_dict = read_tsp_as_dict(filepath)
 
 distance_matrix = create_distance_matrix(city_dict)
