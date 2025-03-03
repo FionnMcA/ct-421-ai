@@ -1,38 +1,84 @@
+from strategy import Strategy
 
-class PrisonersDilema:
+always_c = Strategy(
+    name='Always Cooperate',
+    first_move=1,
+    responses={(1,): 1, (0,): 1},
+    memory_size=1
+)
 
-    def __init__(self, strat1, strat2, rounds):
-        self.strat1 = strat1
-        self.strat2 = strat2
-        self.rounds = rounds
-        self.p1_history = []
-        self.p2_history = []
-        self.p1_score = 0
-        self.p2_score = 0
-        self.payoff_matrix = {
-            ('c', 'c'): (3, 3),
-            ('c', 'd'): (0, 5),
-            ('d', 'c'): (5, 0),
-            ('d', 'd'): (1, 1)
-        }
+always_d = Strategy(
+    name='Always Defect',
+    first_move=0,
+    responses={(1,): 0, (0,): 0},
+    memory_size=1
+)
 
-    def play_round(self):
-        move1 = self.strat1.player_move(self.p2_history)
-        move2 = self.strat2.player_move(self.p1_history)
+tit_for_tat = Strategy(
+    name='Tit For Tat',
+    first_move=1,
+    responses={(1,): 1, (0,): 0},
+    memory_size=1
+)
 
-        self.p1_history.append(move1)
-        self.p2_history.append(move2)
+friedman = Strategy(
+    name='Friedman',
+    first_move=1,
+    responses={(1,): 1, (0,): 0},
+    memory_size=1,
+    friedman=True
+)
 
-        p1_points, p2_points = self.payoff_matrix.get((move1, move2))
+tit_for_two_tats = Strategy(
+    name='Tit For Two Tats',
+    first_move=1,
+    responses={(1,1): 1, (1,0): 1, (0,1): 1, (0,0): 0},
+    memory_size=2
+)
 
-        self.p1_score += p1_points
-        self.p2_score += p2_points
+def payoff_matrix(p1_move, p2_move):
+    if p1_move and p2_move:
+        return (3, 3)  # Both Cooperate
+    elif p1_move and not p2_move:
+        return (0, 5)  # P1 cooperates, P2 defects
+    elif not p1_move and p2_move:
+        return (5, 0)  # P1 defects, P2 cooperates
+    else:
+        return (1, 1)  # Both defect
+
+fixed_strategies = [
+                    always_c,
+                    always_d,
+                    tit_for_tat,
+                    tit_for_two_tats,
+                    friedman,
+                    ]
 
 
+def prisoners_dilemma(strat1, strat2, rounds=10):
+    strat1_move = strat1.first_move
+    strat2_move = strat2.first_move
 
-    def play_game(self):
-        for _ in range(self.rounds):
-            self.play_round()
-        print(self.p1_history)
-        print(self.p2_history)
-        return self.p1_score, self.p2_score
+    score_1 = 0
+    score_2 = 0
+
+    for _ in range(rounds):
+        round_score_1, round_score_2 = payoff_matrix(strat1_move, strat2_move)
+        score_1 += round_score_1
+        score_2 += round_score_2
+
+        strat1.update_history(strat2_move)
+        strat2.update_history(strat1_move)
+
+        strat1_move = strat1.player_move()
+        strat2_move = strat2.player_move()
+
+    return score_1, score_2, strat1.history, strat2.history
+
+def play_all_strategies(random_s):
+    total = 0
+    for strat in fixed_strategies:
+        random_s.history = []
+        score1, score2, s1_history, s2_history = prisoners_dilemma(random_s, strat)
+        total += score1
+    return total
